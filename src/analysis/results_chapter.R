@@ -1,17 +1,13 @@
 ### LOAD LIBRARIES ###
-library(tidyverse) # essential
-library(readr) # used to load in datasets
-library(lubridate) # used to change time (remove?)
-library(ggplot2) # used to make plots
-library(stringr)
-library(zoo)
-library(fixest)
-library(modelsummary) # used to create table (remove?)
+library(tidyverse) # essential Y
+library(readr) # used to load in datasets Y
+library(fixest) # feols Y
+library(broom) # tidy model Y
 
 
 
 ### TABLE 5 ###
-final_data <- read_rds('final_diff_in_diff_data.rds')
+final_data <- read_rds('../../gen/data-preparation/output/final_diff_in_diff_data.rds')
 
 # No fixed effects model
 model_1 <- feols(rating ~ amazon_dummy*acquisition,
@@ -214,20 +210,24 @@ summary(model_genre10)
 plot_data <- rbind(tidy_model_genre1, tidy_model_genre2, tidy_model_genre3, tidy_model_genre4, tidy_model_genre5, tidy_model_genre6, tidy_model_genre7, tidy_model_genre8, tidy_model_genre9, tidy_model_genre10)
 plot_data <- plot_data %>% filter(term == "amazon_dummy:acquisition") %>% rowid_to_column("genre")
 plot_data$genre <- as.factor(plot_data$genre)
-# CHECK THIS OUT, WHICH LINE TO REMOVE #
 
+theme_set(
+  theme_classic() +
+    theme(legend.position = "top")
+)
 error_plot_2 <- ggplot(plot_data, aes(x = genre, y = estimate, ymin = estimate-1.96*std.error, ymax = estimate+1.96*std.error)) + 
   geom_errorbar(width = 0.2) + 
   geom_point(size = 1.5) +
   geom_hline(yintercept=0, linetype = "dashed") + 
   ylab("Estimate") + 
   xlab("Book Genre")
-ggsave("error_plot_2.png", error_plot_2)
+error_plot_2
+ggsave("../../gen/analysis/output/error_plot_2.png", error_plot_2)
 
 
 
 ### FIGURES A1 & 5 ###
-vader_sample2 <- read_rds('vader_sample2.rds')
+vader_sample2 <- read_rds('../../gen/data-preparation/output/vader_sample2.rds')
 
 # Positive-negative ratio/month for Amazon
 pnratio_m_amazon <- vader_sample2 %>%
@@ -268,7 +268,7 @@ pos_neg_full_plot <- ggplot(plot_data, (aes(x = t))) +
   annotate("text", x = 170, y = 3, label = "Acquisition", size = 5) +
   theme(plot.title = element_text(hjust = 0.5))
 pos_neg_full_plot
-ggsave('pos_neg_full_plot.png', pos_neg_full_plot)
+ggsave('../../gen/analysis/output/pos_neg_full_plot.png', pos_neg_full_plot)
 
 # Zooming in on periods 30 months before and after acquisition, i.e. t = 150 til t = 210 (FIGURE 5)
 plot_data2 <- plot_data %>% filter(t >= 156 & t <= 216)
@@ -278,14 +278,13 @@ pos_neg_30_day_plot <- ggplot(plot_data2, (aes(x = t))) +
   geom_vline(xintercept = 186, linetype = "longdash") + 
   ylab("Positive-Negative Ratio") + 
   xlab("Number of months since the first review") + 
-  #  ggtitle("Average book rating on Amazon and Goodreads") +
   theme_bw() + 
   annotate("text", x=200, y=8.5, label="Amazon", size = 5.5, color = "blue") + 
   annotate("text", x=205, y = 4.3, label = "Goodreads", size = 5.5, color = "red") + 
   annotate("text", x = 178, y = 4.07, label = "Acquisition", size = 5) +
   theme(plot.title = element_text(hjust = 0.5))
 pos_neg_30_day_plot
-ggsave('pos_neg_30_day_plot.png', pos_neg_30_day_plot)
+ggsave('../../gen/analysis/output/pos_neg_30_day_plot.png', pos_neg_30_day_plot)
 
 
 
@@ -301,28 +300,31 @@ genre_data <- vader_sample2 %>%
 genre_data <- genre_data %>% na.omit()  
 genre_data <- genre_data %>% select(t, dominant_genre, Label, pos_neg_ratio)
 genre_data <- distinct(genre_data)
-saveRDS(genre_data, 'genre_data.rds')
+saveRDS(genre_data, '../../gen/analysis/output/genre_data.rds')
 
 # Let's only use data from the periods 150-210, i.e., 30 months before and after the acquisition
-genre_data <- genre_data %>% filter(t >= 156 & t <= 216)
+genre_data2 <- genre_data %>% filter(t >= 156 & t <= 216)
 # Furthermore let's only use data from the top 4 dominant genres
-genre_data <- genre_data %>% filter(dominant_genre == 'fiction' | dominant_genre == 'non-fiction' | dominant_genre == 'mystery, thriller, crime' | dominant_genre == 'history, historical fiction, biography')
+genre_data2 <- genre_data2 %>% filter(dominant_genre == 'fiction' | dominant_genre == 'non-fiction' | dominant_genre == 'mystery, thriller, crime' | dominant_genre == 'history, historical fiction, biography')
 
 # Pos-neg ratios for 4 biggest book genres (FIGURE 6)
-pos_neg_genres_30_days <- ggplot(genre_data, aes(x = t, y = pos_neg_ratio, colour = Label)) + 
-  geom_line() + 
-  facet_wrap(~ dominant_genre, ncol = 3) +
-  geom_vline(xintercept=186, linetype = "dashed") +
-  xlab("Number of months since the first review") + 
-  ylab("Positive-Negative Ratio")
-ggsave('pos_neg_genres_30_days.png', pos_neg_genres_30_days)
-
-# Make plot with remaining 6 genres (FIGURE A2)
-genre_data <- genre_data %>% filter(dominant_genre == 'young-adult' | dominant_genre == 'romance' | dominant_genre == 'fantasy, paranormal' | dominant_genre == 'children' | dominant_genre == 'comics, graphic' | dominant_genre == 'poetry')
-pos_neg_genres_30_days_smaller_6 <- ggplot(genre_data, aes(x = t, y = pos_neg_ratio, colour = Label)) + 
+pos_neg_genres_30_days <- ggplot(genre_data2, aes(x = t, y = pos_neg_ratio, colour = Label)) + 
   geom_line() + 
   facet_wrap(~ dominant_genre, ncol = 2) +
   geom_vline(xintercept=186, linetype = "dashed") +
   xlab("Number of months since the first review") + 
   ylab("Positive-Negative Ratio")
-ggsave('pos_neg_genres_30_days_smaller_6.png', pos_neg_genres_30_days_smaller_6)
+pos_neg_genres_30_days
+ggsave('../../gen/analysis/output/pos_neg_genres_30_days.png', pos_neg_genres_30_days)
+
+# Make plot with remaining 6 genres (FIGURE A2)
+genre_data2 <- genre_data %>% filter(t >= 156 & t <= 216)
+genre_data2 <- genre_data2 %>% filter(dominant_genre == 'young-adult' | dominant_genre == 'romance' | dominant_genre == 'fantasy, paranormal' | dominant_genre == 'children' | dominant_genre == 'comics, graphic' | dominant_genre == 'poetry')
+pos_neg_genres_30_days_smaller_6 <- ggplot(genre_data2, aes(x = t, y = pos_neg_ratio, colour = Label)) + 
+  geom_line() + 
+  facet_wrap(~ dominant_genre, ncol = 2) +
+  geom_vline(xintercept=186, linetype = "dashed") +
+  xlab("Number of months since the first review") + 
+  ylab("Positive-Negative Ratio")
+pos_neg_genres_30_days_smaller_6
+ggsave('../../gen/analysis/output/pos_neg_genres_30_days_smaller_6.png', pos_neg_genres_30_days_smaller_6)

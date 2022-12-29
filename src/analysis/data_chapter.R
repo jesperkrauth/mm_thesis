@@ -1,34 +1,28 @@
 ## DATA CHAPTER DESCRIPTIVE ANALYTICS AND TABLES
 
 ## LIBRARIES
-library(tidyverse)
-library(readr)
-library(lubridate)
-library(ggplot2)
-library(stringr)
-library(zoo)
-library(fixest)
-library(modelsummary)
-library(ggrepel)
-library(tokenizers) # count words
+library(tidyverse) # Y
+library(readr) # Y
+library(lubridate) # dates Y
+library(zoo) # as.yearmon Y
+library(tokenizers) # count words Y
 
 
 
 # In-text citation: first and last dates in both datasets (book ratings)
 # Goodreads
-goodreads_dates <- read_rds('goodreads_final.rds')
+goodreads_dates <- read_rds('../../gen/data-preparation/output/goodreads_final.rds')
 goodreads_dates %>% arrange(date) %>% head()
 goodreads_dates %>% arrange(desc(date)) %>% head()
 goodreads_dates %>% group_by(acquisition) %>% summarize(n=n())
 # Amazon
-amazon_dates <- read_rds('amazon_final.rds')
+amazon_dates <- read_rds('../../gen/data-preparation/output/amazon_final.rds')
 amazon_dates %>% arrange(date) %>% head()
 amazon_dates %>% arrange(desc(date)) %>% head()
 amazon_dates %>% group_by(acquisition) %>% summarize(n=n())
 
 # In-text citation: total number of observations in DiD dataset:
-diff_in_diff <- read_rds('final_diff_in_diff_data.rds')
-temp <- head(diff_in_diff)
+diff_in_diff <- read_rds('../../gen/data-preparation/output/final_diff_in_diff_data.rds')
 
 
 
@@ -81,26 +75,26 @@ lineplot_avg_rating <- ggplot(plot_data, (aes(x = t))) +
   annotate("text", x = 222, y = 4.12, label = "Acquisition", size = 5) +
   theme(plot.title = element_text(hjust = 0.5))
 lineplot_avg_rating
-ggsave("lineplot_avg_rating.png", lineplot_avg_rating)
+dir.create('../../gen')
+dir.create('../../gen/analysis')
+dir.create('../../gen/analysis/output')
+ggsave("../../gen/analysis/output/lineplot_avg_rating.png", lineplot_avg_rating)
 
 
 
 # In-text citation: first and last dates in both datasets (sentiment analysis)
-goodreads <- read_rds('labeled_gr_with_dates.rds')
-amazon <- read_rds('labeled_am_with_dates.rds')
+vader_sample2 <- read_rds('../../gen/data-preparation/output/vader_sample2.rds')
 # Goodreads
-temp <- goodreads %>% arrange(timestamp_formatted) %>% head()
-goodreads %>% arrange(desc(timestamp_formatted)) %>% head()
-goodreads %>% group_by(after) %>% summarize(n=n())
+vader_sample2 %>% filter(Label == 'Goodreads') %>% arrange(timestamp) %>% head()
+vader_sample2 %>% filter(Label == 'Goodreads') %>% arrange(desc(timestamp)) %>% head()
 # Amazon
-temp <- amazon %>% arrange(timestamp) %>% head()
-amazon %>% arrange(desc(timestamp)) %>% head()
-amazon %>% group_by(after) %>% summarize(n=n())
+vader_sample2 %>% filter(Label == 'Amazon') %>% arrange(timestamp) %>% head()
+vader_sample2 %>% filter(Label == 'Amazon') %>% arrange(desc(timestamp)) %>% head()
 
 
 
 ### TABLE 4 ###
-text_sample_final <- read_rds('text_sample_final.rds')
+text_sample_final <- read_rds('../../gen/data-preparation/output/text_sample_final.rds')
 text_sample_final$length <- count_words(text_sample_final$reviewText)
 
 # Goodreads, before merger
@@ -155,5 +149,5 @@ lineplot_avg_review_length <- ggplot(plot_data, (aes(x = t))) +
   annotate("text", x = 170, y = 35, label = "Acquisition", size = 5) +
   theme(plot.title = element_text(hjust = 0.5))
 lineplot_avg_review_length
-ggsave("lineplot_avg_review_length.png", lineplot_avg_review_length)
+ggsave("../../gen/analysis/output/lineplot_avg_review_length.png", lineplot_avg_review_length)
 

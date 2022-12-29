@@ -5,26 +5,24 @@
 
 
 ### Load libraries for data cleaning ###
-library(tidyverse) # for compiling
-library(readr) # to read datasets
-library(lubridate) # for time stuff
-library(stringr) # ???
-library(zoo) # ???
-library(fixest) # ???
-library(modelsummary) # ???
+library(tidyverse) # for compiling   Y
+library(readr) # to read datasets   Y
+library(lubridate) # for time stuff   Y
+library(stringr) # for string stuff   Y
+library(zoo) # for as.yearmon   Y
 
 ### TO DO CHECK WHICH LIBRARIES NEEDED AND REMOVE UNNECESSARY LIBRARIES
 
 ### Load data ###
 # Ratings data
-goodreads <- read_rds('goodreads_rev_overlap.rds')
-amazon <- read_rds('amazon_rev_overlap.rds')
+goodreads <- read_rds('../../data/goodreads_rev_overlap.Rds')
+amazon <- read_rds('../../data/amazon_rev_overlap.rds')
 
 # Data on which Amazon ASIN belongs to which Goodreads book ID
-overlap_titles <- read_tsv('overlap_titles_amazon_gr.txt')
+overlap_titles <- read_tsv('../../data/overlap_titles_amazon_gr.txt')
 
 # How many times a book is added to a shelf --> data to select dominant genre
-goodreads_genres <- read_tsv('goodreads_genres.txt')
+goodreads_genres <- read_tsv('../../data/goodreads_genres.txt')
 
 
 
@@ -59,7 +57,7 @@ goodreads$year <- year(goodreads$date_updated)
 # Create dummy "Acquisition", which takes 0 if before 1 July 2013, and 1 if on or after 1 July 2013
 goodreads$acquisition <- ifelse(goodreads$date_updated < cutoff_date, 0, 1)
 goodreads$amazon_dummy <- 0
-goodreads_e$after <- 0
+goodreads$after <- 0
 
 
 
@@ -98,18 +96,20 @@ goodreads$t <- (as.yearmon(goodreads$date_updated) - as.yearmon(first_date))*12
 amazon_final <- amazon %>% select(book_id, year, reviewTime, overall, after, amazon_dummy, acquisition, t)
 amazon_final <- rename(amazon_final, rating = overall)
 amazon_final <- rename(amazon_final, date = reviewTime)
-saveRDS(amazon_final, 'amazon_final.rds')
+dir.create('../../gen')
+dir.create('../../gen/data-preparation')
+dir.create('../../gen/data-preparation/output')
+saveRDS(amazon_final, '../../gen/data-preparation/output/amazon_final.rds')
 
 # Goodreads
 goodreads_final <- goodreads %>% select(book_id, year, date_updated, rating, after, amazon_dummy, acquisition, t)
 goodreads_final <- rename(goodreads_final, date = date_updated)
-saveRDS(goodreads_final, 'goodreads_final.rds')
+saveRDS(goodreads_final, '../../gen/data-preparation/output/goodreads_final.rds')
 
 
 
 ### Merge final datasets into one for DiD analysis ###
 final_data <- rbind(amazon_final, goodreads_final)
-saveRDS(final_data, 'final_diff_in_diff_data.rds')
 
 
 
@@ -146,8 +146,8 @@ goodreads_genres %>% group_by(dominant_genre) %>% summarize(n = n())
 # Take columns of interest for merge with DiD dataset
 goodreads_genres_filtered <- goodreads_genres %>% select(book_id, dominant_genre)
 # Save dataset
-saveRDS(goodreads_genres_filtered, 'goodreads_genres_filtered.rds')
+saveRDS(goodreads_genres_filtered, '../../gen/data-preparation/output/goodreads_genres_filtered.rds')
 
 # Merge with final_data
 final_data <- final_data %>% left_join(goodreads_genres_filtered, by = "book_id")
-saveRDS(final_data, 'final_diff_in_diff_data.rds')
+saveRDS(final_data, '../../gen/data-preparation/output/final_diff_in_diff_data.rds')

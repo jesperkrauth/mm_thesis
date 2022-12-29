@@ -5,32 +5,28 @@
 
 
 ### Load libraries for data cleaning ###
-library(readr)
-library(dplyr)
-library(tibble)
-library(tidyr)
-library(stringr)
-library(tidytext)
-library(vader)
-library(lubridate)
-library(tokenizers)
-library(textdata)
-library(yardstick)
-library(ggplot2)
-library(zoo)
+library(readr) # read datasets Y
+library(tidyverse) # general stuff Y
+library(stringr) # data wrangling Y
+library(tidytext) # text stuff (unsure)
+library(vader) # vader lexicon Y
+library(lubridate) # dates
+library(tokenizers) # count words Y
+library(textdata) # text stuff (unsure)
+library(yardstick) # text stuff (unsure)
+library(zoo) # as.yearmon
 
-### TO DO CHECK WHICH LIBRARIES NEEDED AND REMOVE UNNECESSARY LIBRARIES
 
 
 ### LOAD DATA ###
 # Text review data
-goodreads <- read_rds('labeled_gr_with_dates.rds')
-amazon <- read_rds('labeled_am_with_dates.rds')
+goodreads <- read_rds('../../data/labeled_gr_with_dates.rds')
+amazon <- read_rds('../../data/labeled_am_with_dates.rds')
 goodreads <- rename(goodreads, goodreads_id = asin)
 goodreads$goodreads_id <- as.double(goodreads$goodreads_id)
 
 # Data on which Amazon ASIN belongs to which Goodreads book ID
-overlap_titles <- read_tsv('overlap_titles_amazon_gr.txt')
+overlap_titles <- read_tsv('../../data/overlap_titles_amazon_gr.txt')
 
 
 
@@ -38,9 +34,9 @@ overlap_titles <- read_tsv('overlap_titles_amazon_gr.txt')
 # Note: forgot to set a seed, so every time this code runs it will take another random sample (my bad)
 # Note: did save the sample datasets, can be shared if necessary
 goodreads <- goodreads[sample(nrow(goodreads), 160000), ]
-saveRDS(goodreads, 'goodreads_review_sample_text_analysis.rds')
+saveRDS(goodreads, '../../gen/data-preparation/output/goodreads_review_sample_text_analysis.rds')
 amazon <- amazon[sample(nrow(amazon), 160000), ]
-saveRDS(amazon, 'amazon_review_sample_text_analysis.rds')
+saveRDS(amazon, '../../gen/data-preparation/output/amazon_review_sample_text_analysis.rds')
 
 
 
@@ -76,9 +72,6 @@ text_sample_final <- text_sample_final %>% mutate(
   )
 )
 
-# Save dataset
-saveRDS(text_sample_final, 'text_sample_final.rds')
-
 
 
 #### DATA CLEANING ####
@@ -106,12 +99,16 @@ text_sample_final <-
   filter(count_words(reviewText) > 1) %>%
   rownames_to_column("id")
 
+# Save dataset
+saveRDS(text_sample_final, '../../gen/data-preparation/output/text_sample_final.rds')
 
 
 
 ### Use VADER sentiment lexicon on dataset to obtain sentiment ###
 vader_sample <- vader_df(text_sample_final$reviewText)
-saveRDS(vader_sample, 'vader_sample.rds')
+# in case of any errors (may occur sometimes for a select few), omit NA values
+vader_sample <- na.omit(vader_sample)
+saveRDS(vader_sample, '../../gen/data-preparation/output/vader_sample.rds')
 
 # Use compound score for negative/positive/neutral score:
 vader_sample2 <- 
@@ -137,15 +134,15 @@ vader_sample2$t <- (as.yearmon(vader_sample2$timestamp) - as.yearmon(first_date)
 vader_sample2$t <- round(vader_sample2$t, 0)
 
 # Add dominant genre for books to vader_sample2
-goodreads_genres_filtered <- read_rds('goodreads_genres_filtered.rds')
+goodreads_genres_filtered <- read_rds('../../gen/data-preparation/output/goodreads_genres_filtered.rds')
 vader_sample2 <- vader_sample2 %>% left_join(goodreads_genres_filtered, by = "book_id")
 
 # Save dataset
-saveRDS(vader_sample2, 'vader_sample2.rds')
+saveRDS(vader_sample2, '../../gen/data-preparation/output/vader_sample2.rds')
 
 
 
-
+## IS THIS NECESSARY? DONT THINK SO RIGHT
 ## COMPUTE POS-NEG RATIO ON MONTH LEVEL
 pnratio_m_amazon <- vader_sample2 %>%
   filter(vader_sample != 'neutral' & Label == 'Amazon') %>%
@@ -164,11 +161,3 @@ pnratio_m_goodreads <- vader_sample2 %>%
 saveRDS(pnratio_m_goodreads, 'pnratio_m_goodreads.rds')
 
 pnratio2 <- read_rds('pnratio_m_goodreads.rds')
-
-
-
-
-
-
-
-
