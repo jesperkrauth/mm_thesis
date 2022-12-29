@@ -44,8 +44,8 @@ To generate the outputs used in the thesis, follow these instructions:
 ```
 2. Run ``src/data-preparation/clean_aggregate_did_data.R`` to generate the dataset used in the difference-in-differences analysis.
 3. Run ``src/data-preparation/clean_sentiment_data.R`` to generate the dataset used in the sentiment text analysis.
-4. Run ``src/analysis/data_chapter.R`` to generate the plots and table data used in the "Data" chapter.
-5. Run ``src/analysis/results_chapter.R`` to generate the plots and table data used in the "Results" chapter.
+4. Run ``src/analysis/data_chapter.R`` to generate the plots and table data used in the ``Data`` chapter.
+5. Run ``src/analysis/results_chapter.R`` to generate the plots and table data used in the ``Results`` chapter.
 
 
 ## Authors
