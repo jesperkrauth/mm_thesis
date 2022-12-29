@@ -16,10 +16,18 @@ This repository contains the code used in the analysis part of my master's thesi
 
 - For R, make sure you have installed the following packages:
 ```
-TBA:
-LIST
-OF
-PACKAGES
+library(broom)
+library(lubridate)
+library(fixest)
+library(readr)
+library(stringr)
+library(textdata) (maybe not?)
+library(tidytext) (maybe not?)
+library(tidyverse)
+library(tokenizers)
+library(vader)
+library(yardstick) (maybe not?)
+library(zoo)
 ```
 
 ## Running the code
