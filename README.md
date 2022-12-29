@@ -1,4 +1,4 @@
-# Thesis MSc Marketing Management (MM): the Amazon-Goodreads acquisition.
+# Thesis MSc Marketing Management (MM): the Amazon-Goodreads acquisition
 This repository contains the code used in the analysis part of my master's thesis for the MSc Marketing Management at Tilburg University.
 
 ## Repository overview
