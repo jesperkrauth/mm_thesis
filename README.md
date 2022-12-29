@@ -42,10 +42,10 @@ To generate the outputs used in the thesis, follow these instructions:
 - labeled_gr_with_dates: a dataset containing a sample of Goodreads book reviews' text
 - overlap_titles_amazon_gr: a dataset indicating which Amazon ASIN corresponds to which Goodreads book ID
 ```
-2. Run src/data-preparation/clean_aggregate_did_data.R to generate the dataset used in the difference-in-differences analysis.
-3. Run src/data-preparation/clean_sentiment_data.R to generate the dataset used in the sentiment text analysis.
-4. Run src/analysis/data_chapter.R to generate the plots and table data used in the "Data" chapter.
-5. Run src/analysis/results_chapter.R to generate the plots and table data used in the "Results" chapter.
+2. Run ``src/data-preparation/clean_aggregate_did_data.R`` to generate the dataset used in the difference-in-differences analysis.
+3. Run ``src/data-preparation/clean_sentiment_data.R`` to generate the dataset used in the sentiment text analysis.
+4. Run ``src/analysis/data_chapter.R`` to generate the plots and table data used in the "Data" chapter.
+5. Run ``src/analysis/results_chapter.R`` to generate the plots and table data used in the "Results" chapter.
 
 
 ## Authors
