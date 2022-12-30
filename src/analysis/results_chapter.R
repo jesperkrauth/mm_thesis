@@ -47,8 +47,6 @@ tidy_model_3
 summary(model_3)
 
 
-
-
 ### TABLE 6 ###
 # List of most popular genres
 final_data %>% group_by(dominant_genre) %>% summarize(n = n()) %>% arrange(desc(n))
@@ -223,6 +221,19 @@ error_plot_2 <- ggplot(plot_data, aes(x = genre, y = estimate, ymin = estimate-1
   xlab("Book Genre")
 error_plot_2
 ggsave("../../gen/analysis/output/error_plot_2.png", error_plot_2)
+
+
+
+### TABLE 7: FINDING 'DOMINANT' GENRES ###
+# Mean for all genres on Goodreads before the merger
+final_data %>% filter(after==0 & amazon_dummy==0) %>% group_by(dominant_genre) %>% summarize(mean_genre = mean(rating))
+# Total mean Goodreads before the merger
+final_data %>% filter(after==0 & amazon_dummy==0) %>% summarize(mean_total = mean(rating))
+
+# Mean for all genres on Amazon before the merger
+final_data %>% filter(after==0 & amazon_dummy==1) %>% group_by(dominant_genre) %>% summarize(mean_genre = mean(rating))
+# Total mean Amazon before the merger
+final_data %>% filter(after==0 & amazon_dummy==1) %>% summarize(mean_total = mean(rating))
 
 
 
