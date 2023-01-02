@@ -40,7 +40,7 @@ amazon$year <- year(amazon$reviewTime)
 cutoff_date <- as.Date('2013-07-01')
 amazon$acquisition <- ifelse(amazon$reviewTime < cutoff_date, 0, 1)
 amazon$amazon_dummy <- 1
-amazon$after <- amazon$acquisition * amazon$amazon_dummy
+amazon$amazon_after <- amazon$acquisition * amazon$amazon_dummy
 
 
 
@@ -57,7 +57,7 @@ goodreads$year <- year(goodreads$date_updated)
 # Create dummy "Acquisition", which takes 0 if before 1 July 2013, and 1 if on or after 1 July 2013
 goodreads$acquisition <- ifelse(goodreads$date_updated < cutoff_date, 0, 1)
 goodreads$amazon_dummy <- 0
-goodreads$after <- 0
+goodreads$amazon_after <- 0
 
 
 
@@ -93,7 +93,7 @@ goodreads$t <- (as.yearmon(goodreads$date_updated) - as.yearmon(first_date))*12
 
 ### Create final datasets to be merged into one for DiD analysis ###
 # Amazon
-amazon_final <- amazon %>% select(book_id, year, reviewTime, overall, after, amazon_dummy, acquisition, t)
+amazon_final <- amazon %>% select(book_id, year, reviewTime, overall, amazon_after, amazon_dummy, acquisition, t)
 amazon_final <- rename(amazon_final, rating = overall)
 amazon_final <- rename(amazon_final, date = reviewTime)
 dir.create('../../gen')
@@ -102,7 +102,7 @@ dir.create('../../gen/data-preparation/output')
 saveRDS(amazon_final, '../../gen/data-preparation/output/amazon_final.rds')
 
 # Goodreads
-goodreads_final <- goodreads %>% select(book_id, year, date_updated, rating, after, amazon_dummy, acquisition, t)
+goodreads_final <- goodreads %>% select(book_id, year, date_updated, rating, amazon_after, amazon_dummy, acquisition, t)
 goodreads_final <- rename(goodreads_final, date = date_updated)
 saveRDS(goodreads_final, '../../gen/data-preparation/output/goodreads_final.rds')
 

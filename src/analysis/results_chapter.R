@@ -226,14 +226,14 @@ ggsave("../../gen/analysis/output/error_plot_2.png", error_plot_2)
 
 ### TABLE 7: FINDING 'DOMINANT' GENRES ###
 # Mean for all genres on Goodreads before the merger
-final_data %>% filter(after==0 & amazon_dummy==0) %>% group_by(dominant_genre) %>% summarize(mean_genre = mean(rating))
+final_data %>% filter(acquisition==0 & amazon_dummy==0) %>% group_by(dominant_genre) %>% summarize(mean_genre = mean(rating))
 # Total mean Goodreads before the merger
-final_data %>% filter(after==0 & amazon_dummy==0) %>% summarize(mean_total = mean(rating))
+final_data %>% filter(acquisition==0 & amazon_dummy==0) %>% summarize(mean_total = mean(rating))
 
 # Mean for all genres on Amazon before the merger
-final_data %>% filter(after==0 & amazon_dummy==1) %>% group_by(dominant_genre) %>% summarize(mean_genre = mean(rating))
+final_data %>% filter(acquisition==0 & amazon_dummy==1) %>% group_by(dominant_genre) %>% summarize(mean_genre = mean(rating))
 # Total mean Amazon before the merger
-final_data %>% filter(after==0 & amazon_dummy==1) %>% summarize(mean_total = mean(rating))
+final_data %>% filter(acquisition==0 & amazon_dummy==1) %>% summarize(mean_total = mean(rating))
 
 
 
