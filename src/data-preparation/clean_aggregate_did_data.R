@@ -2,16 +2,13 @@
 ### CLEAN DID DATA #####
 ########################
 
-
-
 ### Load libraries for data cleaning ###
-library(tidyverse) # for compiling   Y
-library(readr) # to read datasets   Y
-library(lubridate) # for time stuff   Y
-library(stringr) # for string stuff   Y
-library(zoo) # for as.yearmon   Y
+library(tidyverse)
+library(readr)
+library(lubridate)
+library(stringr)
+library(zoo)
 
-### TO DO CHECK WHICH LIBRARIES NEEDED AND REMOVE UNNECESSARY LIBRARIES
 
 ### Load data ###
 # Ratings data

@@ -1,9 +1,12 @@
-### LOAD LIBRARIES ###
-library(tidyverse) # essential Y
-library(readr) # used to load in datasets Y
-library(fixest) # feols Y
-library(broom) # tidy model Y
+#########################
+### RESULTS CHAPTER #####
+#########################
 
+### LOAD LIBRARIES ###
+library(tidyverse)
+library(readr)
+library(fixest)
+library(broom)
 
 
 ### TABLE 5 ###
@@ -300,7 +303,7 @@ ggsave('../../gen/analysis/output/pos_neg_30_day_plot.png', pos_neg_30_day_plot)
 
 
 
-### TABLE 7 & A3 ###
+### TABLE 7 & A2 ###
 vader_sample2 %>% group_by(dominant_genre) %>% summarise(n = n()) %>% arrange(desc(n))
 # Fiction
 pnratio_m_amazon_fiction <- vader_sample2 %>%

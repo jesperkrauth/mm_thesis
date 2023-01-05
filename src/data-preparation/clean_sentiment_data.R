@@ -2,19 +2,14 @@
 ### CLEAN SENTIMENT DATA #####
 ##############################
 
-
-
 ### Load libraries for data cleaning ###
-library(readr) # read datasets Y
-library(tidyverse) # general stuff Y
-library(stringr) # data wrangling Y
-library(tidytext) # text stuff (unsure)
-library(vader) # vader lexicon Y
-library(lubridate) # dates
-library(tokenizers) # count words Y
-library(textdata) # text stuff (unsure)
-library(yardstick) # text stuff (unsure)
-library(zoo) # as.yearmon
+library(readr)
+library(tidyverse)
+library(stringr)
+library(vader)
+library(lubridate)
+library(tokenizers)
+library(zoo)
 
 
 
@@ -139,25 +134,3 @@ vader_sample2 <- vader_sample2 %>% left_join(goodreads_genres_filtered, by = "bo
 
 # Save dataset
 saveRDS(vader_sample2, '../../gen/data-preparation/output/vader_sample2.rds')
-
-
-
-## IS THIS NECESSARY? DONT THINK SO RIGHT
-## COMPUTE POS-NEG RATIO ON MONTH LEVEL
-pnratio_m_amazon <- vader_sample2 %>%
-  filter(vader_sample != 'neutral' & Label == 'Amazon') %>%
-  group_by(t, vader_sample) %>%
-  summarise(N = n()) %>%
-  mutate(pos_neg_ratio = N[2]/N[1])
-saveRDS(pnratio_m_amazon, 'pnratio_m_amazon.rds')
-
-pnratio <- read_rds('pnratio_m_amazon.rds')
-
-pnratio_m_goodreads <- vader_sample2 %>%
-  filter(vader_sample != 'neutral' & Label == 'Goodreads') %>%
-  group_by(t, vader_sample) %>%
-  summarise(N = n()) %>%
-  mutate(pos_neg_ratio = N[2]/N[1])
-saveRDS(pnratio_m_goodreads, 'pnratio_m_goodreads.rds')
-
-pnratio2 <- read_rds('pnratio_m_goodreads.rds')

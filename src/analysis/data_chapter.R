@@ -1,15 +1,17 @@
-## DATA CHAPTER DESCRIPTIVE ANALYTICS AND TABLES
+######################
+### DATA CHAPTER #####
+######################
 
 ## LIBRARIES
-library(tidyverse) # Y
-library(readr) # Y
-library(lubridate) # dates Y
-library(zoo) # as.yearmon Y
-library(tokenizers) # count words Y
+library(tidyverse)
+library(readr)
+library(lubridate)
+library(zoo)
+library(tokenizers)
 
 
 
-# In-text citation: first and last dates in both datasets (book ratings)
+### In-text citation: first and last dates in both datasets (book ratings) ###
 # Goodreads
 goodreads_dates <- read_rds('../../gen/data-preparation/output/goodreads_final.rds')
 goodreads_dates %>% arrange(date) %>% head()
