@@ -21,12 +21,9 @@ library(lubridate)
 library(fixest)
 library(readr)
 library(stringr)
-library(textdata) (maybe not?)
-library(tidytext) (maybe not?)
 library(tidyverse)
 library(tokenizers)
 library(vader)
-library(yardstick) (maybe not?)
 library(zoo)
 ```
 
