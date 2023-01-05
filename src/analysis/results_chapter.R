@@ -300,7 +300,341 @@ ggsave('../../gen/analysis/output/pos_neg_30_day_plot.png', pos_neg_30_day_plot)
 
 
 
-### FIGURES 6 & A2 ###
+### TABLE 7 & A3 ###
+vader_sample2 %>% group_by(dominant_genre) %>% summarise(n = n()) %>% arrange(desc(n))
+# Fiction
+pnratio_m_amazon_fiction <- vader_sample2 %>%
+  filter(vader_sample != 'neutral' & Label == 'Amazon' & dominant_genre == 'fiction') %>%
+  group_by(t, vader_sample) %>%
+  summarise(N = n()) %>%
+  mutate(pos_neg_ratio = N[2]/N[1])
+temp <- pnratio_m_amazon_fiction %>% select(t, pos_neg_ratio)
+temp <- drop_na(temp)
+temp <- distinct(temp)
+temp <- rename(temp, pos_neg_ratio_amazon_fiction = pos_neg_ratio)
+
+pnratio_m_goodreads_fiction <- vader_sample2 %>%
+  filter(vader_sample != 'neutral' & Label == 'Goodreads' & dominant_genre == 'fiction') %>%
+  group_by(t, vader_sample) %>%
+  summarise(N = n()) %>%
+  mutate(pos_neg_ratio = N[2]/N[1])
+temp2 <- pnratio_m_goodreads_fiction %>% select(t, pos_neg_ratio)
+temp2 <- drop_na(temp2)
+temp2 <- distinct(temp2)
+temp2 <- rename(temp2, pos_neg_ratio_goodreads_fiction = pos_neg_ratio)
+
+overlap_data_fiction <- temp %>% left_join(temp2, by = "t")
+overlap_data_fiction <- drop_na(overlap_data_fiction)
+overlap_data_fiction <- overlap_data_fiction %>% filter(t >= 156 & t <= 216)
+
+mean(overlap_data_fiction$pos_neg_ratio_amazon_fiction)
+min(overlap_data_fiction$pos_neg_ratio_amazon_fiction)
+max(overlap_data_fiction$pos_neg_ratio_amazon_fiction)
+
+mean(overlap_data_fiction$pos_neg_ratio_goodreads_fiction)
+min(overlap_data_fiction$pos_neg_ratio_goodreads_fiction)
+max(overlap_data_fiction$pos_neg_ratio_goodreads_fiction)
+
+# Non-fiction
+pnratio_m_amazon_non_fiction <- vader_sample2 %>%
+  filter(vader_sample != 'neutral' & Label == 'Amazon' & dominant_genre == 'non-fiction') %>%
+  group_by(t, vader_sample) %>%
+  summarise(N = n()) %>%
+  mutate(pos_neg_ratio = N[2]/N[1])
+temp <- pnratio_m_amazon_non_fiction %>% select(t, pos_neg_ratio)
+temp <- drop_na(temp)
+temp <- distinct(temp)
+temp <- rename(temp, pos_neg_ratio_amazon_non_fiction = pos_neg_ratio)
+
+pnratio_m_goodreads_non_fiction <- vader_sample2 %>%
+  filter(vader_sample != 'neutral' & Label == 'Goodreads' & dominant_genre == 'non-fiction') %>%
+  group_by(t, vader_sample) %>%
+  summarise(N = n()) %>%
+  mutate(pos_neg_ratio = N[2]/N[1])
+temp2 <- pnratio_m_goodreads_non_fiction %>% select(t, pos_neg_ratio)
+temp2 <- drop_na(temp2)
+temp2 <- distinct(temp2)
+temp2 <- rename(temp2, pos_neg_ratio_goodreads_non_fiction = pos_neg_ratio)
+
+overlap_data_non_fiction <- temp %>% left_join(temp2, by = "t")
+overlap_data_non_fiction <- drop_na(overlap_data_non_fiction)
+overlap_data_non_fiction <- overlap_data_non_fiction %>% filter(t >= 156 & t <= 216)
+
+mean(overlap_data_non_fiction$pos_neg_ratio_amazon_non_fiction)
+min(overlap_data_non_fiction$pos_neg_ratio_amazon_non_fiction)
+max(overlap_data_non_fiction$pos_neg_ratio_amazon_non_fiction)
+
+mean(overlap_data_non_fiction$pos_neg_ratio_goodreads_non_fiction)
+min(overlap_data_non_fiction$pos_neg_ratio_goodreads_non_fiction)
+max(overlap_data_non_fiction$pos_neg_ratio_goodreads_non_fiction)
+
+# Mystery, thriller, crime
+pnratio_m_amazon_mtc <- vader_sample2 %>%
+  filter(vader_sample != 'neutral' & Label == 'Amazon' & dominant_genre == 'mystery, thriller, crime') %>%
+  group_by(t, vader_sample) %>%
+  summarise(N = n()) %>%
+  mutate(pos_neg_ratio = N[2]/N[1])
+temp <- pnratio_m_amazon_mtc %>% select(t, pos_neg_ratio)
+temp <- drop_na(temp)
+temp <- distinct(temp)
+temp <- rename(temp, pos_neg_ratio_amazon_mtc = pos_neg_ratio)
+
+pnratio_m_goodreads_mtc <- vader_sample2 %>%
+  filter(vader_sample != 'neutral' & Label == 'Goodreads' & dominant_genre == 'mystery, thriller, crime') %>%
+  group_by(t, vader_sample) %>%
+  summarise(N = n()) %>%
+  mutate(pos_neg_ratio = N[2]/N[1])
+temp2 <- pnratio_m_goodreads_mtc %>% select(t, pos_neg_ratio)
+temp2 <- drop_na(temp2)
+temp2 <- distinct(temp2)
+temp2 <- rename(temp2, pos_neg_ratio_goodreads_mtc = pos_neg_ratio)
+
+overlap_data_mtc <- temp %>% left_join(temp2, by = "t")
+overlap_data_mtc <- drop_na(overlap_data_mtc)
+overlap_data_mtc <- overlap_data_mtc %>% filter(t >= 156 & t <= 216)
+
+mean(overlap_data_mtc$pos_neg_ratio_amazon_mtc)
+min(overlap_data_mtc$pos_neg_ratio_amazon_mtc)
+max(overlap_data_mtc$pos_neg_ratio_amazon_mtc)
+
+mean(overlap_data_mtc$pos_neg_ratio_goodreads_mtc)
+min(overlap_data_mtc$pos_neg_ratio_goodreads_mtc)
+max(overlap_data_mtc$pos_neg_ratio_goodreads_mtc)
+
+# History, historical fiction, biography
+pnratio_m_amazon_hist <- vader_sample2 %>%
+  filter(vader_sample != 'neutral' & Label == 'Amazon' & dominant_genre == 'history, historical fiction, biography') %>%
+  group_by(t, vader_sample) %>%
+  summarise(N = n()) %>%
+  mutate(pos_neg_ratio = N[2]/N[1])
+temp <- pnratio_m_amazon_hist %>% select(t, pos_neg_ratio)
+temp <- drop_na(temp)
+temp <- distinct(temp)
+temp <- rename(temp, pos_neg_ratio_amazon_hist = pos_neg_ratio)
+
+pnratio_m_goodreads_hist <- vader_sample2 %>%
+  filter(vader_sample != 'neutral' & Label == 'Goodreads' & dominant_genre == 'history, historical fiction, biography') %>%
+  group_by(t, vader_sample) %>%
+  summarise(N = n()) %>%
+  mutate(pos_neg_ratio = N[2]/N[1])
+temp2 <- pnratio_m_goodreads_hist %>% select(t, pos_neg_ratio)
+temp2 <- drop_na(temp2)
+temp2 <- distinct(temp2)
+temp2 <- rename(temp2, pos_neg_ratio_goodreads_hist = pos_neg_ratio)
+
+overlap_data_hist <- temp %>% left_join(temp2, by = "t")
+overlap_data_hist <- drop_na(overlap_data_hist)
+overlap_data_hist <- overlap_data_hist %>% filter(t >= 156 & t <= 216)
+
+mean(overlap_data_hist$pos_neg_ratio_amazon_hist)
+min(overlap_data_hist$pos_neg_ratio_amazon_hist)
+max(overlap_data_hist$pos_neg_ratio_amazon_hist)
+
+mean(overlap_data_hist$pos_neg_ratio_goodreads_hist)
+min(overlap_data_hist$pos_neg_ratio_goodreads_hist)
+max(overlap_data_hist$pos_neg_ratio_goodreads_hist)
+
+# Young-adult
+pnratio_m_amazon_yadult <- vader_sample2 %>%
+  filter(vader_sample != 'neutral' & Label == 'Amazon' & dominant_genre == 'young-adult') %>%
+  group_by(t, vader_sample) %>%
+  summarise(N = n()) %>%
+  mutate(pos_neg_ratio = N[2]/N[1])
+temp <- pnratio_m_amazon_yadult %>% select(t, pos_neg_ratio)
+temp <- drop_na(temp)
+temp <- distinct(temp)
+temp <- rename(temp, pos_neg_ratio_amazon_yadult = pos_neg_ratio)
+
+pnratio_m_goodreads_yadult <- vader_sample2 %>%
+  filter(vader_sample != 'neutral' & Label == 'Goodreads' & dominant_genre == 'young-adult') %>%
+  group_by(t, vader_sample) %>%
+  summarise(N = n()) %>%
+  mutate(pos_neg_ratio = N[2]/N[1])
+temp2 <- pnratio_m_goodreads_yadult %>% select(t, pos_neg_ratio)
+temp2 <- drop_na(temp2)
+temp2 <- distinct(temp2)
+temp2 <- rename(temp2, pos_neg_ratio_goodreads_yadult = pos_neg_ratio)
+
+overlap_data_yadult <- temp %>% left_join(temp2, by = "t")
+overlap_data_yadult <- drop_na(overlap_data_yadult)
+overlap_data_yadult <- overlap_data_yadult %>% filter(t >= 156 & t <= 216)
+
+mean(overlap_data_yadult$pos_neg_ratio_amazon_yadult)
+min(overlap_data_yadult$pos_neg_ratio_amazon_yadult)
+max(overlap_data_yadult$pos_neg_ratio_amazon_yadult)
+
+mean(overlap_data_yadult$pos_neg_ratio_goodreads_yadult)
+min(overlap_data_yadult$pos_neg_ratio_goodreads_yadult)
+max(overlap_data_yadult$pos_neg_ratio_goodreads_yadult)
+
+# Romance
+pnratio_m_amazon_romance <- vader_sample2 %>%
+  filter(vader_sample != 'neutral' & Label == 'Amazon' & dominant_genre == 'romance') %>%
+  group_by(t, vader_sample) %>%
+  summarise(N = n()) %>%
+  mutate(pos_neg_ratio = N[2]/N[1])
+temp <- pnratio_m_amazon_romance %>% select(t, pos_neg_ratio)
+temp <- drop_na(temp)
+temp <- distinct(temp)
+temp <- rename(temp, pos_neg_ratio_amazon_romance = pos_neg_ratio)
+
+pnratio_m_goodreads_romance <- vader_sample2 %>%
+  filter(vader_sample != 'neutral' & Label == 'Goodreads' & dominant_genre == 'romance') %>%
+  group_by(t, vader_sample) %>%
+  summarise(N = n()) %>%
+  mutate(pos_neg_ratio = N[2]/N[1])
+temp2 <- pnratio_m_goodreads_romance %>% select(t, pos_neg_ratio)
+temp2 <- drop_na(temp2)
+temp2 <- distinct(temp2)
+temp2 <- rename(temp2, pos_neg_ratio_goodreads_romance = pos_neg_ratio)
+
+overlap_data_romance <- temp %>% left_join(temp2, by = "t")
+overlap_data_romance <- drop_na(overlap_data_romance)
+overlap_data_romance <- overlap_data_romance %>% filter(t >= 156 & t <= 216)
+
+mean(overlap_data_romance$pos_neg_ratio_amazon_romance)
+min(overlap_data_romance$pos_neg_ratio_amazon_romance)
+max(overlap_data_romance$pos_neg_ratio_amazon_romance)
+
+mean(overlap_data_romance$pos_neg_ratio_goodreads_romance)
+min(overlap_data_romance$pos_neg_ratio_goodreads_romance)
+max(overlap_data_romance$pos_neg_ratio_goodreads_romance)
+
+# Fantasy, paranormal
+pnratio_m_amazon_fanpar <- vader_sample2 %>%
+  filter(vader_sample != 'neutral' & Label == 'Amazon' & dominant_genre == 'fantasy, paranormal') %>%
+  group_by(t, vader_sample) %>%
+  summarise(N = n()) %>%
+  mutate(pos_neg_ratio = N[2]/N[1])
+temp <- pnratio_m_amazon_fanpar %>% select(t, pos_neg_ratio)
+temp <- drop_na(temp)
+temp <- distinct(temp)
+temp <- rename(temp, pos_neg_ratio_amazon_fanpar = pos_neg_ratio)
+
+pnratio_m_goodreads_fanpar <- vader_sample2 %>%
+  filter(vader_sample != 'neutral' & Label == 'Goodreads' & dominant_genre == 'fantasy, paranormal') %>%
+  group_by(t, vader_sample) %>%
+  summarise(N = n()) %>%
+  mutate(pos_neg_ratio = N[2]/N[1])
+temp2 <- pnratio_m_goodreads_fanpar %>% select(t, pos_neg_ratio)
+temp2 <- drop_na(temp2)
+temp2 <- distinct(temp2)
+temp2 <- rename(temp2, pos_neg_ratio_goodreads_fanpar = pos_neg_ratio)
+
+overlap_data_fanpar <- temp %>% left_join(temp2, by = "t")
+overlap_data_fanpar <- drop_na(overlap_data_fanpar)
+overlap_data_fanpar <- overlap_data_fanpar %>% filter(t >= 156 & t <= 216)
+
+mean(overlap_data_fanpar$pos_neg_ratio_amazon_fanpar)
+min(overlap_data_fanpar$pos_neg_ratio_amazon_fanpar)
+max(overlap_data_fanpar$pos_neg_ratio_amazon_fanpar)
+
+mean(overlap_data_fanpar$pos_neg_ratio_goodreads_fanpar)
+min(overlap_data_fanpar$pos_neg_ratio_goodreads_fanpar)
+max(overlap_data_fanpar$pos_neg_ratio_goodreads_fanpar)
+
+# Children
+pnratio_m_amazon_children <- vader_sample2 %>%
+  filter(vader_sample != 'neutral' & Label == 'Amazon' & dominant_genre == 'children') %>%
+  group_by(t, vader_sample) %>%
+  summarise(N = n()) %>%
+  mutate(pos_neg_ratio = N[2]/N[1])
+temp <- pnratio_m_amazon_children %>% select(t, pos_neg_ratio)
+temp <- drop_na(temp)
+temp <- distinct(temp)
+temp <- rename(temp, pos_neg_ratio_amazon_children = pos_neg_ratio)
+
+pnratio_m_goodreads_children <- vader_sample2 %>%
+  filter(vader_sample != 'neutral' & Label == 'Goodreads' & dominant_genre == 'children') %>%
+  group_by(t, vader_sample) %>%
+  summarise(N = n()) %>%
+  mutate(pos_neg_ratio = N[2]/N[1])
+temp2 <- pnratio_m_goodreads_children %>% select(t, pos_neg_ratio)
+temp2 <- drop_na(temp2)
+temp2 <- distinct(temp2)
+temp2 <- rename(temp2, pos_neg_ratio_goodreads_children = pos_neg_ratio)
+
+overlap_data_children <- temp %>% left_join(temp2, by = "t")
+overlap_data_children <- drop_na(overlap_data_children)
+overlap_data_children <- overlap_data_children %>% filter(t >= 156 & t <= 216)
+
+mean(overlap_data_children$pos_neg_ratio_amazon_children)
+min(overlap_data_children$pos_neg_ratio_amazon_children)
+max(overlap_data_children$pos_neg_ratio_amazon_children)
+
+mean(overlap_data_children$pos_neg_ratio_goodreads_children)
+min(overlap_data_children$pos_neg_ratio_goodreads_children)
+max(overlap_data_children$pos_neg_ratio_goodreads_children)
+
+# Comics, graphic
+pnratio_m_amazon_comgra <- vader_sample2 %>%
+  filter(vader_sample != 'neutral' & Label == 'Amazon' & dominant_genre == 'comics, graphic') %>%
+  group_by(t, vader_sample) %>%
+  summarise(N = n()) %>%
+  mutate(pos_neg_ratio = N[2]/N[1])
+temp <- pnratio_m_amazon_comgra %>% select(t, pos_neg_ratio)
+temp <- drop_na(temp)
+temp <- distinct(temp)
+temp <- rename(temp, pos_neg_ratio_amazon_comgra = pos_neg_ratio)
+
+pnratio_m_goodreads_comgra <- vader_sample2 %>%
+  filter(vader_sample != 'neutral' & Label == 'Goodreads' & dominant_genre == 'comics, graphic') %>%
+  group_by(t, vader_sample) %>%
+  summarise(N = n()) %>%
+  mutate(pos_neg_ratio = N[2]/N[1])
+temp2 <- pnratio_m_goodreads_comgra %>% select(t, pos_neg_ratio)
+temp2 <- drop_na(temp2)
+temp2 <- distinct(temp2)
+temp2 <- rename(temp2, pos_neg_ratio_goodreads_comgra = pos_neg_ratio)
+
+overlap_data_comgra <- temp %>% left_join(temp2, by = "t")
+overlap_data_comgra <- drop_na(overlap_data_comgra)
+overlap_data_comgra <- overlap_data_comgra %>% filter(t >= 156 & t <= 216)
+
+mean(overlap_data_comgra$pos_neg_ratio_amazon_comgra)
+min(overlap_data_comgra$pos_neg_ratio_amazon_comgra)
+max(overlap_data_comgra$pos_neg_ratio_amazon_comgra)
+
+mean(overlap_data_comgra$pos_neg_ratio_goodreads_comgra)
+min(overlap_data_comgra$pos_neg_ratio_goodreads_comgra)
+max(overlap_data_comgra$pos_neg_ratio_goodreads_comgra)
+
+# Poetry
+pnratio_m_amazon_poetry <- vader_sample2 %>%
+  filter(vader_sample != 'neutral' & Label == 'Amazon' & dominant_genre == 'poetry') %>%
+  group_by(t, vader_sample) %>%
+  summarise(N = n()) %>%
+  mutate(pos_neg_ratio = N[2]/N[1])
+temp <- pnratio_m_amazon_poetry %>% select(t, pos_neg_ratio)
+temp <- drop_na(temp)
+temp <- distinct(temp)
+temp <- rename(temp, pos_neg_ratio_amazon_poetry = pos_neg_ratio)
+
+pnratio_m_goodreads_poetry <- vader_sample2 %>%
+  filter(vader_sample != 'neutral' & Label == 'Goodreads' & dominant_genre == 'poetry') %>%
+  group_by(t, vader_sample) %>%
+  summarise(N = n()) %>%
+  mutate(pos_neg_ratio = N[2]/N[1])
+temp2 <- pnratio_m_goodreads_poetry %>% select(t, pos_neg_ratio)
+temp2 <- drop_na(temp2)
+temp2 <- distinct(temp2)
+temp2 <- rename(temp2, pos_neg_ratio_goodreads_poetry = pos_neg_ratio)
+
+overlap_data_poetry <- temp %>% left_join(temp2, by = "t")
+overlap_data_poetry <- drop_na(overlap_data_poetry)
+overlap_data_poetry <- overlap_data_poetry %>% filter(t >= 156 & t <= 216)
+
+mean(overlap_data_poetry$pos_neg_ratio_amazon_poetry)
+min(overlap_data_poetry$pos_neg_ratio_amazon_poetry)
+max(overlap_data_poetry$pos_neg_ratio_amazon_poetry)
+
+mean(overlap_data_poetry$pos_neg_ratio_goodreads_poetry)
+min(overlap_data_poetry$pos_neg_ratio_goodreads_poetry)
+max(overlap_data_poetry$pos_neg_ratio_goodreads_poetry)
+
+
+
+### FIGURES 6 & A3 ###
 vader_sample2 %>% group_by(dominant_genre) %>% summarise(n = n()) %>% arrange(desc(n))
 
 genre_data <- vader_sample2 %>%
@@ -319,23 +653,24 @@ genre_data2 <- genre_data %>% filter(t >= 156 & t <= 216)
 genre_data2 <- genre_data2 %>% filter(dominant_genre == 'fiction' | dominant_genre == 'non-fiction' | dominant_genre == 'mystery, thriller, crime' | dominant_genre == 'history, historical fiction, biography')
 
 # Pos-neg ratios for 4 biggest book genres (FIGURE 6)
-pos_neg_genres_30_days <- ggplot(genre_data2, aes(x = t, y = pos_neg_ratio, colour = Label)) + 
+pos_neg_genres_30_months <- ggplot(genre_data2, aes(x = t, y = pos_neg_ratio, colour = Label)) + 
   geom_line() + 
   facet_wrap(~ dominant_genre, ncol = 2) +
   geom_vline(xintercept=186, linetype = "dashed") +
   xlab("Number of months since the first review") + 
   ylab("Positive-Negative Ratio")
-pos_neg_genres_30_days
-ggsave('../../gen/analysis/output/pos_neg_genres_30_days.png', pos_neg_genres_30_days)
+pos_neg_genres_30_months
+ggsave('../../gen/analysis/output/pos_neg_genres_30_months.png', pos_neg_genres_30_months)
 
 # Make plot with remaining 6 genres (FIGURE A2)
 genre_data2 <- genre_data %>% filter(t >= 156 & t <= 216)
 genre_data2 <- genre_data2 %>% filter(dominant_genre == 'young-adult' | dominant_genre == 'romance' | dominant_genre == 'fantasy, paranormal' | dominant_genre == 'children' | dominant_genre == 'comics, graphic' | dominant_genre == 'poetry')
-pos_neg_genres_30_days_smaller_6 <- ggplot(genre_data2, aes(x = t, y = pos_neg_ratio, colour = Label)) + 
+pos_neg_genres_30_months_smaller_6 <- ggplot(genre_data2, aes(x = t, y = pos_neg_ratio, colour = Label)) + 
   geom_line() + 
   facet_wrap(~ dominant_genre, ncol = 2) +
   geom_vline(xintercept=186, linetype = "dashed") +
   xlab("Number of months since the first review") + 
   ylab("Positive-Negative Ratio")
-pos_neg_genres_30_days_smaller_6
-ggsave('../../gen/analysis/output/pos_neg_genres_30_days_smaller_6.png', pos_neg_genres_30_days_smaller_6)
+pos_neg_genres_30_months_smaller_6
+ggsave('../../gen/analysis/output/pos_neg_genres_30_months_smaller_6.png', pos_neg_genres_30_months_smaller_6)
+
