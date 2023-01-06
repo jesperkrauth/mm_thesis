@@ -286,7 +286,7 @@ ggsave('../../gen/analysis/output/pos_neg_full_plot.png', pos_neg_full_plot)
 
 # Zooming in on periods 30 months before and after acquisition, i.e. t = 150 til t = 210 (FIGURE 5)
 plot_data2 <- plot_data %>% filter(t >= 156 & t <= 216)
-pos_neg_30_day_plot <- ggplot(plot_data2, (aes(x = t))) + 
+pos_neg_30_month_plot <- ggplot(plot_data2, (aes(x = t))) + 
   geom_line(aes(y = pos_neg_ratio_goodreads), color = "red") +
   geom_line(aes(y = pos_neg_ratio_amazon), color = "blue") + 
   geom_vline(xintercept = 186, linetype = "longdash") + 
@@ -297,13 +297,13 @@ pos_neg_30_day_plot <- ggplot(plot_data2, (aes(x = t))) +
   annotate("text", x=205, y = 4.3, label = "Goodreads", size = 5.5, color = "red") + 
   annotate("text", x = 178, y = 4.07, label = "Acquisition", size = 5) +
   theme(plot.title = element_text(hjust = 0.5))
-pos_neg_30_day_plot
-ggsave('../../gen/analysis/output/pos_neg_30_day_plot.png', pos_neg_30_day_plot)
+pos_neg_30_month_plot
+ggsave('../../gen/analysis/output/pos_neg_30_month_plot.png', pos_neg_30_month_plot)
 
 
 
 
-### TABLE 7 & A2 ###
+### TABLE 8 & A2 ###
 vader_sample2 %>% group_by(dominant_genre) %>% summarise(n = n()) %>% arrange(desc(n))
 # Fiction
 pnratio_m_amazon_fiction <- vader_sample2 %>%
